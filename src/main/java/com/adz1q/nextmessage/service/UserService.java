@@ -51,56 +51,6 @@ public class UserService {
         this.messageRepository = messageRepository;
     }
 
-    @Data
-    public static class JwtResponse {
-        private String token;
-
-        public JwtResponse(String token) {
-            this.token = token;
-        }
-    }
-
-    @Data
-    public static class RegisterRequestDto {
-        private String username;
-        private String email;
-        private String password;
-    }
-
-    @Data
-    public static class LoginRequestDto {
-        private String login;
-        private String password;
-    }
-
-    @Data
-    public static class ChangeUsernameRequestDto {
-        private int userId;
-        private String newUsername;
-    }
-
-    @Data
-    public static class ChangePasswordRequestDto {
-        private int userId;
-        private String oldPassword;
-        private String newPassword;
-    }
-
-    @Data
-    public static class ChangeMessagePreferencesRequestDto {
-        private int userId;
-        private boolean allowMessagesFromNonFriends;
-    }
-
-    @Data
-    public static class FoundUser {
-        private int id;
-        private String username;
-        private String profilePictureUrl;
-        private LocalDateTime date;
-        private boolean allowMessagesFromNonFriends;
-    }
-
     public String generateProfilePictureUrl(String name) {
         String firstLetter = name.substring(0, 1).toUpperCase();
 
@@ -391,5 +341,55 @@ public class UserService {
         }
 
         return foundUsers;
+    }
+
+    @Data
+    public static class JwtResponse {
+        private String token;
+
+        public JwtResponse(String token) {
+            this.token = token;
+        }
+    }
+
+    @Data
+    public static class RegisterRequestDto {
+        private String username;
+        private String email;
+        private String password;
+    }
+
+    @Data
+    public static class LoginRequestDto {
+        private String login;
+        private String password;
+    }
+
+    @Data
+    public static class ChangeUsernameRequestDto {
+        private int userId;
+        private String newUsername;
+    }
+
+    @Data
+    public static class ChangePasswordRequestDto {
+        private int userId;
+        private String oldPassword;
+        private String newPassword;
+    }
+
+    @Data
+    public static class ChangeMessagePreferencesRequestDto {
+        private int userId;
+        private boolean allowMessagesFromNonFriends;
+    }
+
+    @Data
+    public static class FoundUser {
+        private int id;
+        private String username;
+        private String profilePictureUrl;
+        private LocalDateTime date;
+        private boolean allowMessagesFromNonFriends;
     }
 }

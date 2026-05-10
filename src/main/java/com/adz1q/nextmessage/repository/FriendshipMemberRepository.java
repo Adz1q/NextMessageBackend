@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface FriendshipMemberRepository extends JpaRepository<FriendshipMember, Integer> {
     void deleteByFriendshipId(int friendshipId);
+
     List<FriendshipMember> findByUserId(int userId);
+
     List<FriendshipMember> findByFriendshipId(int friendshipId);
 }

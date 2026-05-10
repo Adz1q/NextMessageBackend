@@ -57,91 +57,6 @@ public class ChatService {
         this.friendshipRepository = friendshipRepository;
     }
 
-    @Data
-    public static class EncryptedMessage {
-        private String content;
-        private SecretKey secretKey;
-    }
-
-    @Data
-    public static class ChatCard {
-        private int id;
-        private String name;
-        private LocalDateTime lastUpdated;
-        private String profilePictureUrl;
-        private String type;
-    }
-
-    @Data
-    public static class MessageDto {
-        private int id;
-        private int chatId;
-        private int senderId;
-        private String senderUsername;
-        private String content;
-        private LocalDateTime date;
-    }
-
-    @Data
-    public static class PrivateChatRequestDto {
-        private int senderId;
-        private int receiverId;
-    }
-
-    @Data
-    public static class OtherChatMemberDto {
-        private int id;
-        private String username;
-        private String profilePictureUrl;
-        private LocalDateTime date;
-        private boolean isFriend;
-    }
-
-    @Data
-    public static class TeamChatRequestDto {
-        private String name;
-        private int adminId;
-        List<Integer> memberIds;
-    }
-
-    @Data
-    public static class ChangeTeamChatNameRequestDto {
-        private int chatId;
-        private int userId;
-        private String name;
-    }
-
-    @Data
-    public static class DeleteTeamChatProfilePictureRequestDto {
-        private int chatId;
-        private int userId;
-    }
-
-    @Data
-    public static class ChangeTeamChatAdminRequestDto {
-        private int chatId;
-        private int userId;
-        private int newAdminId;
-    }
-
-    @Data
-    public static class AddTeamChatMembersRequestDto {
-        private int chatId;
-        private int userId;
-        private List<Integer> newMemberIds;
-    }
-
-    @Data
-    public static class ChatMemberDTO {
-        private int id;
-        private int userId;
-        private int chatId;
-        private String username;
-        private String profilePictureUrl;
-        private boolean allowMessagesFromNonFriends;
-        private boolean isFriend;
-    }
-
     public EncryptedMessage encryptMessage(String content) throws Exception {
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -258,8 +173,7 @@ public class ChatService {
                 messageDto.setDate(message.getDate());
 
                 messageDtos.add(messageDto);
-            }
-            catch (Exception error) {
+            } catch (Exception error) {
                 System.out.println("Error while decrypting message");
             }
         }
@@ -392,57 +306,6 @@ public class ChatService {
 
         return ResponseEntity.ok(chatMembers);
     }
-
-//    public ResponseEntity<Object> getOtherPrivateChatMember(int chatId, int userId) {
-//        Optional<ChatMember> optionalChatMember = chatMemberRepository.findByUserIdAndChatId(userId, chatId);
-//
-//        if (optionalChatMember.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not a member of this chat");
-//        }
-//
-//        Optional<Chat> optionalChat = chatRepository.findById(chatId);
-//
-//        if (optionalChat.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Chat not found");
-//        }
-//
-//        List<ChatMember> chatMembers = chatMemberRepository.findByChatId(chatId);
-//        OtherChatMemberDto otherChatMemberDto = new OtherChatMemberDto();
-//
-//        for (ChatMember chatMember : chatMembers) {
-//            if (chatMember.getUserId() != userId) {
-//                Optional<User> optionalUser = userRepository.findById(chatMember.getUserId());
-//
-//                if (optionalUser.isEmpty()) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
-//                }
-//
-//                User user = optionalUser.get();
-//
-//                otherChatMemberDto.setId(user.getId());
-//                otherChatMemberDto.setUsername(user.getUsername());
-//                otherChatMemberDto.setProfilePictureUrl(user.getProfilePictureUrl());
-//                otherChatMemberDto.setDate(user.getDate());
-//                otherChatMemberDto.setFriend(false);
-//
-//                List<FriendshipMember> friendshipMembersUser = friendshipMemberRepository.findByUserId(userId);
-//                List<FriendshipMember> friendshipMembersOtherUser = friendshipMemberRepository.findByUserId(user.getId());
-//
-//                for (FriendshipMember friendshipMemberUser : friendshipMembersUser) {
-//                    for (FriendshipMember friendshipMemberOtherUser : friendshipMembersOtherUser) {
-//                        if (friendshipMemberUser.getFriendshipId() == friendshipMemberOtherUser.getFriendshipId()) {
-//                            otherChatMemberDto.setFriend(true);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                break;
-//            }
-//        }
-//
-//        return ResponseEntity.ok(otherChatMemberDto);
-//    }
 
     public ResponseEntity<Object> getOtherPrivateChatMember(int chatId, int userId) {
         Optional<ChatMember> optionalChatMember = chatMemberRepository.findByUserIdAndChatId(userId, chatId);
@@ -931,6 +794,57 @@ public class ChatService {
         return ResponseEntity.ok("Chat deleted");
     }
 
+//    public ResponseEntity<Object> getOtherPrivateChatMember(int chatId, int userId) {
+//        Optional<ChatMember> optionalChatMember = chatMemberRepository.findByUserIdAndChatId(userId, chatId);
+//
+//        if (optionalChatMember.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not a member of this chat");
+//        }
+//
+//        Optional<Chat> optionalChat = chatRepository.findById(chatId);
+//
+//        if (optionalChat.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Chat not found");
+//        }
+//
+//        List<ChatMember> chatMembers = chatMemberRepository.findByChatId(chatId);
+//        OtherChatMemberDto otherChatMemberDto = new OtherChatMemberDto();
+//
+//        for (ChatMember chatMember : chatMembers) {
+//            if (chatMember.getUserId() != userId) {
+//                Optional<User> optionalUser = userRepository.findById(chatMember.getUserId());
+//
+//                if (optionalUser.isEmpty()) {
+//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
+//                }
+//
+//                User user = optionalUser.get();
+//
+//                otherChatMemberDto.setId(user.getId());
+//                otherChatMemberDto.setUsername(user.getUsername());
+//                otherChatMemberDto.setProfilePictureUrl(user.getProfilePictureUrl());
+//                otherChatMemberDto.setDate(user.getDate());
+//                otherChatMemberDto.setFriend(false);
+//
+//                List<FriendshipMember> friendshipMembersUser = friendshipMemberRepository.findByUserId(userId);
+//                List<FriendshipMember> friendshipMembersOtherUser = friendshipMemberRepository.findByUserId(user.getId());
+//
+//                for (FriendshipMember friendshipMemberUser : friendshipMembersUser) {
+//                    for (FriendshipMember friendshipMemberOtherUser : friendshipMembersOtherUser) {
+//                        if (friendshipMemberUser.getFriendshipId() == friendshipMemberOtherUser.getFriendshipId()) {
+//                            otherChatMemberDto.setFriend(true);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                break;
+//            }
+//        }
+//
+//        return ResponseEntity.ok(otherChatMemberDto);
+//    }
+
     @Transactional
     public ResponseEntity<Object> leaveTeamChat(int chatId, int userId) {
         Optional<ChatMember> optionalChatMember = chatMemberRepository.findByUserIdAndChatId(userId, chatId);
@@ -984,10 +898,91 @@ public class ChatService {
     public boolean isMemberOfChat(int chatId, int userId) {
         Optional<ChatMember> optionalChatMember = chatMemberRepository.findByUserIdAndChatId(userId, chatId);
 
-        if (optionalChatMember.isEmpty()) {
-            return false;
-        }
+        return optionalChatMember.isPresent();
+    }
 
-        return true;
+    @Data
+    public static class EncryptedMessage {
+        private String content;
+        private SecretKey secretKey;
+    }
+
+    @Data
+    public static class ChatCard {
+        private int id;
+        private String name;
+        private LocalDateTime lastUpdated;
+        private String profilePictureUrl;
+        private String type;
+    }
+
+    @Data
+    public static class MessageDto {
+        private int id;
+        private int chatId;
+        private int senderId;
+        private String senderUsername;
+        private String content;
+        private LocalDateTime date;
+    }
+
+    @Data
+    public static class PrivateChatRequestDto {
+        private int senderId;
+        private int receiverId;
+    }
+
+    @Data
+    public static class OtherChatMemberDto {
+        private int id;
+        private String username;
+        private String profilePictureUrl;
+        private LocalDateTime date;
+        private boolean isFriend;
+    }
+
+    @Data
+    public static class TeamChatRequestDto {
+        List<Integer> memberIds;
+        private String name;
+        private int adminId;
+    }
+
+    @Data
+    public static class ChangeTeamChatNameRequestDto {
+        private int chatId;
+        private int userId;
+        private String name;
+    }
+
+    @Data
+    public static class DeleteTeamChatProfilePictureRequestDto {
+        private int chatId;
+        private int userId;
+    }
+
+    @Data
+    public static class ChangeTeamChatAdminRequestDto {
+        private int chatId;
+        private int userId;
+        private int newAdminId;
+    }
+
+    @Data
+    public static class AddTeamChatMembersRequestDto {
+        private int chatId;
+        private int userId;
+        private List<Integer> newMemberIds;
+    }
+
+    @Data
+    public static class ChatMemberDTO {
+        private int id;
+        private int userId;
+        private int chatId;
+        private String username;
+        private String profilePictureUrl;
+        private boolean allowMessagesFromNonFriends;
+        private boolean isFriend;
     }
 }

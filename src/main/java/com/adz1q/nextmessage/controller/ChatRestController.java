@@ -133,6 +133,6 @@ public class ChatRestController {
             @PathVariable int chatId,
             @RequestParam int userId
     ) {
-        return  chatService.isMemberOfChat(chatId, userId);
+        return chatService.isMemberOfChat(chatId, userId);
     }
 }

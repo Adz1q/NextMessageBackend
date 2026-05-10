@@ -19,28 +19,13 @@ public class ChatController {
     public ChatController(
             SimpMessagingTemplate simpMessagingTemplate,
             ChatService chatService
-            ) {
+    ) {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.chatService = chatService;
     }
 
-    @Data
-    public static class GetChatsByUserIdDTO {
-        private int userId;
-    }
-
-    @Data
-    public static class GetTeamChatDTO {
-        private int chatId;
-    }
-
-    @Data
-    public static class GetTeamChatMembersDTO {
-        private int chatId;
-        private int userId;
-    }
-
-    @MessageMapping("/chat.sendMessage") // This is the endpoint that the frontend will send messages to (accessing this endpoint will be calling this method)
+    @MessageMapping("/chat.sendMessage")
+    // This is the endpoint that the frontend will send messages to (accessing this endpoint will be calling this method)
 //    @SendTo("/topic/chat/{chatId}") // This is the topic that the frontend will subscribe to and there will be sent responses // But in this case we couldn't use SendTo() because the topic have to be dynamic, so we use SimpMessagingTemplate instead in "sendMessage()"
     public void sendMessage(ChatMessage chatMessage) throws Exception {
         ChatService.MessageDto messageDTO = chatService.sendMessage(chatMessage);
@@ -61,5 +46,21 @@ public class ChatController {
     @MessageMapping("/chat.getTeamChatMembers")
     public void getTeamChatMembers(GetTeamChatMembersDTO getTeamChatMembersDTO) {
         chatService.refreshChatMembers(getTeamChatMembersDTO.getChatId(), getTeamChatMembersDTO.getUserId());
+    }
+
+    @Data
+    public static class GetChatsByUserIdDTO {
+        private int userId;
+    }
+
+    @Data
+    public static class GetTeamChatDTO {
+        private int chatId;
+    }
+
+    @Data
+    public static class GetTeamChatMembersDTO {
+        private int chatId;
+        private int userId;
     }
 }

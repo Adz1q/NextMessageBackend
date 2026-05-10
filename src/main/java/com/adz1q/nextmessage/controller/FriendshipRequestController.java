@@ -23,14 +23,14 @@ public class FriendshipRequestController {
         this.friendshipRequestService = friendshipRequestService;
     }
 
-    @Data
-    public static class GetFriendshipRequestsByUserIdDTO {
-        private int userId;
-    }
-
     @MessageMapping("/friendshipRequest.getFriendshipRequestsByUserId")
     public void getFriendshipRequestsByUserId(GetFriendshipRequestsByUserIdDTO getFriendshipRequestsByUserIdDTO) {
         List<FriendshipRequestService.FriendshipRequestDTO> friendshipRequests = friendshipRequestService.getFriendshipRequestsByReceiverId(getFriendshipRequestsByUserIdDTO.getUserId());
         simpMessagingTemplate.convertAndSend("/topic/user/" + getFriendshipRequestsByUserIdDTO.getUserId() + "/friendshipRequests", friendshipRequests);
+    }
+
+    @Data
+    public static class GetFriendshipRequestsByUserIdDTO {
+        private int userId;
     }
 }

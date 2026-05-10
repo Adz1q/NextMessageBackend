@@ -42,15 +42,6 @@ public class FriendshipService {
         this.chatService = chatService;
     }
 
-    @Data
-    public static class Friend {
-        private int id;
-        private String username;
-        private String profilePictureUrl;
-        private int friendshipId;
-        private LocalDateTime date;
-    }
-
     public ResponseEntity<Object> addFriend(int senderId, int receiverId) {
         Friendship friendship = new Friendship();
         friendship.setDate(LocalDateTime.now());
@@ -150,5 +141,14 @@ public class FriendshipService {
     public void refreshUserFriendList(int userId) {
         List<Friend> friends = getFriends(userId);
         simpMessagingTemplate.convertAndSend("/topic/user/" + userId + "/friends", friends);
+    }
+
+    @Data
+    public static class Friend {
+        private int id;
+        private String username;
+        private String profilePictureUrl;
+        private int friendshipId;
+        private LocalDateTime date;
     }
 }

@@ -37,34 +37,6 @@ public class FriendshipRequestService {
         this.chatService = chatService;
     }
 
-    @Data
-    public static class SendFriendshipRequestDto {
-        private int senderId;
-        private int receiverId;
-    }
-
-    @Data
-    public static class RejectFriendshipRequestDto {
-        private int senderId;
-        private int receiverId;
-    }
-
-    @Data
-    public static class AcceptFriendshipRequestDto {
-        private int senderId;
-        private int receiverId;
-    }
-
-    @Data
-    public static class FriendshipRequestDTO {
-        private int id;
-        private int senderId;
-        private int receiverId;
-        private LocalDateTime date;
-        private String senderUsername;
-        private String senderProfilePictureUrl;
-    }
-
     public ResponseEntity<Object> sendFriendshipRequest(SendFriendshipRequestDto sendFriendshipRequestDto) {
         Optional<User> optionalSender = userRepository.findById(sendFriendshipRequestDto.getSenderId());
         Optional<User> optionalReceiver = userRepository.findById(sendFriendshipRequestDto.getReceiverId());
@@ -152,7 +124,7 @@ public class FriendshipRequestService {
     }
 
     public List<FriendshipRequestDTO> getFriendshipRequestsByReceiverId(int receiverId) {
-        List<FriendshipRequest> friendshipRequests= friendshipRequestRepository.findByReceiverId(receiverId);
+        List<FriendshipRequest> friendshipRequests = friendshipRequestRepository.findByReceiverId(receiverId);
         List<FriendshipRequestDTO> friendshipRequestDTOS = new ArrayList<>();
 
         for (FriendshipRequest friendshipRequest : friendshipRequests) {
@@ -185,5 +157,33 @@ public class FriendshipRequestService {
     public void refreshUserFriendshipRequestsList(int userId) {
         List<FriendshipRequestDTO> friendshipRequests = getFriendshipRequestsByReceiverId(userId);
         simpMessagingTemplate.convertAndSend("/topic/user/" + userId + "/friendshipRequests", friendshipRequests);
+    }
+
+    @Data
+    public static class SendFriendshipRequestDto {
+        private int senderId;
+        private int receiverId;
+    }
+
+    @Data
+    public static class RejectFriendshipRequestDto {
+        private int senderId;
+        private int receiverId;
+    }
+
+    @Data
+    public static class AcceptFriendshipRequestDto {
+        private int senderId;
+        private int receiverId;
+    }
+
+    @Data
+    public static class FriendshipRequestDTO {
+        private int id;
+        private int senderId;
+        private int receiverId;
+        private LocalDateTime date;
+        private String senderUsername;
+        private String senderProfilePictureUrl;
     }
 }
